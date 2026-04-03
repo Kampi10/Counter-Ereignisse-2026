@@ -105,17 +105,23 @@ digital.innerHTML="🎉 Jetzt feiern!";
 return;
 }
 
+// korrekt gestaffelt
 let seconds=Math.floor(diff/1000);
-let minutes=Math.floor(seconds/60);
-let hours=Math.floor(minutes/60);
-let days=Math.floor(hours/24);
-let weeks=Math.floor(days/7);
-let months=Math.floor(days/30);
 
-seconds%=60;
-minutes%=60;
-hours%=24;
-days%=7;
+let months=Math.floor(seconds/(60*60*24*30));
+seconds-=months*(60*60*24*30);
+
+let weeks=Math.floor(seconds/(60*60*24*7));
+seconds-=weeks*(60*60*24*7);
+
+let days=Math.floor(seconds/(60*60*24));
+seconds-=days*(60*60*24);
+
+let hours=Math.floor(seconds/(60*60));
+seconds-=hours*(60*60);
+
+let minutes=Math.floor(seconds/60);
+seconds-=minutes*60;
 
 let parts=[];
 if(months>0) parts.push(months+" Mo");
@@ -125,7 +131,6 @@ if(hours>0) parts.push(hours+" h");
 if(minutes>0) parts.push(minutes+" m");
 if(seconds>0) parts.push(seconds+" s");
 
-// wenn alles 0 (sehr selten)
 if(parts.length===0) parts.push("0 s");
 
 digital.innerHTML=parts.join(" • ");

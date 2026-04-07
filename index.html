@@ -63,6 +63,7 @@ return new Date(dateStr).toLocaleString("de-AT");
 }
 
 function sortEvents(){
+events = events.filter(e => new Date(e.date) > new Date());
 events.sort((a,b)=>new Date(a.date)-new Date(b.date));
 }
 
@@ -104,17 +105,11 @@ const card=document.getElementById("card"+i);
 
 card.classList.remove("next","warning");
 
-if(diff<=0){
-digital.innerHTML="🎉 Jetzt feiern!";
-return;
-}
-
 let seconds=Math.floor(diff/1000);
 
 let months=Math.floor(seconds/(60*60*24*30));
 seconds-=months*(60*60*24*30);
 
-// 👉 NEU: Monate → Jahre umrechnen
 let years=Math.floor(months/12);
 months = months % 12;
 
@@ -146,19 +141,7 @@ digital.innerHTML=parts.join(" • ");
 if(i===0){card.classList.add("next");}
 if(diff<1000*60*60*24){card.classList.add("warning");}
 
-const key="notified_"+event.name;
-if(diff<1000*60*60*24 && !localStorage.getItem(key)){
-if(Notification.permission==="granted"){
-new Notification("🔔 Erinnerung",{body:event.name+" ist bald!"});
-}
-localStorage.setItem(key,"yes");
-}
-
 });
-}
-
-if("Notification" in window){
-Notification.requestPermission();
 }
 
 render();
